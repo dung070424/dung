@@ -31,13 +31,15 @@ export class TodoComponent implements OnInit {
 
   saveTodo(){
 
-
+    
     if(this.id ===-1){
 
       this.todoService.cerateTodo('dung123', this.todo).subscribe(
         date => {
           console.log(date)
           this.router.navigate(['todos'])
+
+          
         }
       )
     }else{
