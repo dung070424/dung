@@ -1,0 +1,39 @@
+<h1>Todo</h1>
+
+<div class="container">
+  <div class="alert alert-warning" *ngIf='todoForm.dirty && todoForm.invalid'>Không được để trống</div>
+  <div class="alert alert-warning" *ngIf='todoForm.dirty && targetDate.invalid'>Không được để trống Ngày</div>
+  <div class="alert alert-warning" *ngIf='todoForm.dirty && description.invalid'>Tên Không được để tróng và không được ít hơn 5 ký tự</div>
+ <form (ngSubmit)="!todoForm.invalid &&  saveTodo()" #todoForm="ngForm">
+   <!-- Fieldset cho Description -->
+   <fieldset class="form-group">
+    <label for="description">Description</label>
+    <input 
+      type="text" #description="ngModel"
+      [(ngModel)]="todo.description" 
+      class="form-control" 
+      id="description" 
+      name="description" 
+      required="required"
+      minlength="5">
+  </fieldset>
+
+  <!-- Fieldset cho Target Date -->
+  <fieldset class="form-group">
+    <label for="targetDate">Target Date</label>
+    <input 
+      type="date" #targetDate="ngModel" 
+      [ngModel]="todo.targetDate | date: 'yyyy-MM-dd' " 
+      (ngModelChange)="todo.targetDate = $event"
+      class="form-control" 
+      id="targetDate" 
+      name="targetDate" 
+      required="required">
+  </fieldset>
+
+  <!-- Nút Save -->
+  <button type="submit" class="btn btn-success">Save</button>
+ </form>
+</div>
+
+
