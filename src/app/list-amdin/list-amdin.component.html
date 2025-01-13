@@ -1,0 +1,39 @@
+<h1>Danh Sách Admin</h1>
+
+<div class="container">
+  <div class="alert alert-success" *ngIf='messages'>{{ messages}}</div>
+<div>
+
+
+<table class="table">
+  <caption>Danh Sách Admin</caption>
+  <thead>
+    <tr>
+      
+      <th>Tên Nhân Viên</th>
+      <th>Giới Tính</th>
+      <th>Ngày Sinh</th>
+      <th>Chức vụ</th>
+      <th>Actions</th>
+      <th>Update</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let amdin of amdin">
+      <td>{{amdin.name}}</td>
+      <td>{{amdin.gioitinh?"Nam":"Nữ"}}</td>
+      <td>{{amdin.ngaysinh | date | uppercase}}</td>
+      <td>{{ amdin.chucvu }}</td>
+      <td>
+        <button (click)="deleteAdmin(amdin.id)" class="btn btn-warning">Delete</button>
+      </td>
+      <td>
+        <button (click)="updateAdmin(amdin.id)" class="btn btn-success">Update</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div>
+  <button (click)="Adminadd(amdin.id)" class="btn btn-success">Add</button>
+</div>

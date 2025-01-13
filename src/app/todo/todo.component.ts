@@ -19,21 +19,27 @@ export class TodoComponent implements OnInit {
 
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
-    this.todo = new Todo(this.id,'',false,new Date());
+    this.todo = new Todo(this.id,'',false,new Date(),'',false);
     if(this.id!=-1){
       this.todoService.retrieveTodo('dung123', this.id).subscribe(
-        data => this.todo = data
-      )
+         data => {
+    console.log('Data retrieved:', data);
+    this.todo = {
+      ...data,
+      gioiTinh: data.gioiTinh?true:false,
+    };
+  })
     }
 
   }
 
 
   saveTodo(){
-
-    
-    if(this.id ===-1){
-
+// console.log("===========",this.todo)
+    // const todoData:Todo={...this.todo,gioitinh:this.todo.gioitinh?true:false};
+    if(this.id == -1){
+      
+      this.todo.id=undefined
       this.todoService.cerateTodo('dung123', this.todo).subscribe(
         date => {
           console.log(date)
@@ -51,7 +57,18 @@ export class TodoComponent implements OnInit {
       )
     }
 
-
+    // if (this.id === -1) {
+      
+    //   this.todoService.cerateTodo('dung123', null).subscribe(
+    //     (data) => {
+    //       console.log(data);
+    //       this.router.navigate(['todos']);
+    //     },
+    //     (err) => {
+    //       console.log(err);
+    //     }
+    //   );
+    // }
    
   }
 

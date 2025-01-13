@@ -1,6 +1,11 @@
 <h1>Welcome</h1>
+
 <div class="container">
     Welcome {{name}}. You can manage your todos <a routerLink="/todos">here</a>
+</div>
+
+<div *ngIf="roles === 'ROLE_ADMIN'" class="container">
+    Welcome {{name}}. Danh Sách Admin <a routerLink="/amdin">here</a>
 </div>
 
 <div class="container">
@@ -11,5 +16,9 @@
 <div class="container" *ngIf="welcomeMessageFromService">
     <h2>Your Customized Welcome Message</h2>
     {{welcomeMessageFromService}}
+</div>
+
+<div class="container" *ngIf="welcomeMessageFromService">
+    <p>User Role: {{ roles }}</p>
 </div>
 

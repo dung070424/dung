@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WelcomeDataService } from '../service/data/welcome-data.service';
+
 
 // import { AppComponent } from '../app.component';
 
@@ -10,21 +11,36 @@ import { WelcomeDataService } from '../service/data/welcome-data.service';
   styleUrls: ['./welcome.component.css']
 })
 export class WelcomeComponent implements OnInit {
-   message = 'Some Welcome Message'
-   welcomeMessageFromService: string
-  name = ''
-
+    message = 'Some Welcome Message'
+    welcomeMessageFromService: string
+    name = ''
+    roles = ''
 
    //Kích hoạt
   constructor(private route:ActivatedRoute,
-              private service: WelcomeDataService
+              private service: WelcomeDataService,
+              private router: Router
+              
 
   ) { }
 
   ngOnInit() {
-    console.log(this.message)
-    // console.log(this.route.snapshot.params['name'])
-    this.name = this.route.snapshot.params['name']
+    console.log(this.message);
+
+    // Lấy tên người dùng từ URL
+    this.name = this.route.snapshot.params['name'];
+
+    this.roles = sessionStorage.getItem('role') || '';  // Lấy role từ sessionStorage
+    // if (this.roles === 'ROLE_ADMIN') {
+    //   this.router.navigate(['/amdin']);  // Admin được điều hướng tới trang admin
+    // } else if (this.roles === 'ROLE_USER') {
+    //   this.router.navigate(['/todos']);  // User được điều hướng tới bảng todos
+    // } else {
+    //   this.router.navigate(['/welcome/${name}']);  // Mặc định cho các trường hợp không xác định
+    // }
+    console.log('User Role:', this.roles); 
+
+    
   }
 
   getWelcomeMessage(){

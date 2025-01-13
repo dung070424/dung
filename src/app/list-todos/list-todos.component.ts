@@ -6,9 +6,11 @@ import { Router } from '@angular/router';
 export class Todo{
   constructor(
     public id: number,
-    public description: String,
+    public description: string,
     public done: boolean,
-    public targetDate: Date
+    public targetDate: Date,
+    public chucvu : string,
+    public gioiTinh : boolean
   ){
 
   }}
@@ -38,7 +40,7 @@ export class ListTodosComponent implements OnInit {
   constructor(
     private todoService:TodoDataService,
     private router : Router
-  ) { }
+  ) {}
 
   ngOnInit() {
      this.refreshTodos();

@@ -13,11 +13,23 @@ export class RouteGuardService implements CanActivate {
   ) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    if (this.authService.isUserLoggedIn()) 
+    const role = sessionStorage.getItem('role');  
+
+    if (role === 'ROLE_ADMIN') {
+      
       return true;
-      this.router.navigate(['login'])
+    } else if (role === 'ROLE_USER') {
+      
+      if (state.url.includes('/welcome') || state.url.includes('/todos') || state.url === '/logout') {
+        return true;
+      } else {
+        this.router.navigate(['/error']); 
+        return false;
+      }
+    } else {
+      
+      this.router.navigate(['/login']);
       return false;
-    
-    
+    }
   }
 }
