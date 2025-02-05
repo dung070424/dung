@@ -1,39 +1,103 @@
-<h1>Danh Sách Admin</h1>
+<h1 style="text-align: center;">Danh Sách Admin</h1>
 
 <div class="container">
-  <div class="alert alert-success" *ngIf='messages'>{{ messages}}</div>
-<div>
-
-
-<table class="table">
-  <caption>Danh Sách Admin</caption>
-  <thead>
-    <tr>
-      
-      <th>Tên Nhân Viên</th>
-      <th>Giới Tính</th>
-      <th>Ngày Sinh</th>
-      <th>Chức vụ</th>
-      <th>Actions</th>
-      <th>Update</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let amdin of amdin">
-      <td>{{amdin.name}}</td>
-      <td>{{amdin.gioitinh?"Nam":"Nữ"}}</td>
-      <td>{{amdin.ngaysinh | date | uppercase}}</td>
-      <td>{{ amdin.chucvu }}</td>
-      <td>
-        <button (click)="deleteAdmin(amdin.id)" class="btn btn-warning">Delete</button>
-      </td>
-      <td>
-        <button (click)="updateAdmin(amdin.id)" class="btn btn-success">Update</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<div>
-  <button (click)="Adminadd(amdin.id)" class="btn btn-success">Add</button>
+  <div class="alert alert-success" *ngIf="messages">{{ messages }}</div>
 </div>
+
+<!-- Tìm kiếm -->
+<div class="container.search-container ">
+  <div class="container">
+    <mat-form-field appearance="outline">
+      <mat-label>Tìm kiếm</mat-label>
+      <input matInput [(ngModel)]="searchName" placeholder="Nhập tên admin cần tìm" (keyup)="onSearchInputChange(searchName)">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+</div>
+
+<br>
+
+<!-- Bảng danh sách Admin -->
+<div class="container">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+
+    <!-- Họ Và Tên -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="changeSort('name')"> 
+        Họ Và Tên
+      </th>
+      <td mat-cell *matCellDef="let admin"> {{ admin.name }} </td>
+    </ng-container>
+
+    <!-- Giới Tính -->
+    <ng-container matColumnDef="gioitinh">
+      <th mat-header-cell *matHeaderCellDef> Giới Tính </th>
+      <td mat-cell *matCellDef="let admin"> {{ admin.gioitinh ? 'Nam' : 'Nữ' }} </td>
+    </ng-container>
+
+    <!-- Ngày Sinh -->
+    <ng-container matColumnDef="ngaysinh">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="changeSort('ngaysinh')"> 
+        Ngày Sinh 
+      </th>
+      <td mat-cell *matCellDef="let admin"> {{ admin.ngaysinh | date:'shortDate' | uppercase }} </td>
+    </ng-container>
+
+    <!-- Chức Vụ -->
+    <ng-container matColumnDef="chucvu">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="changeSort('chucvu')"> 
+        Chức Vụ 
+      </th>
+      <td mat-cell *matCellDef="let admin"> {{ admin.chucvu }} </td>
+    </ng-container>
+
+    <!-- Delete -->
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let admin">
+        <button (click)="deleteAdmin(admin.id)" mat-raised-button color="warn">
+          Xóa
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- Update -->
+    <ng-container matColumnDef="update">
+      <th mat-header-cell *matHeaderCellDef> Update </th>
+      <td mat-cell *matCellDef="let admin">
+        <button (click)="updateAdmin(admin.id)" mat-raised-button color="primary">
+          Cập Nhật
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- Thông Tin -->
+    <ng-container matColumnDef="info">
+      <th mat-header-cell *matHeaderCellDef> Thông Tin </th>
+      <td mat-cell *matCellDef="let admin">
+        <button (click)="viewAdminInfo(admin.id)" mat-raised-button color="accent">
+          Xem
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+  </table>
+</div>
+
+<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+<br>
+
+<!-- Nút thêm Admin -->
+
+<div class="container">
+  <div class="row">
+    <button (click)="Adminadd()" mat-raised-button color="success">
+      Thêm Admin
+    </button>
+  </div>
+</div>
+

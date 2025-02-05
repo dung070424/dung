@@ -1,0 +1,28 @@
+<h1>Thông Tin Admin</h1>
+<div *ngIf="admin">
+  <h2>{{ admin.name }}</h2>
+  <p>Giới tính: {{ admin.gioitinh ? 'Nam' : 'Nữ' }}</p>
+  <p>Ngày sinh: {{ admin.ngaysinh | date }}</p>
+  <p>Chức vụ: {{ admin.chucvu }}</p>
+</div>
+
+<h2>Danh Sách Công Việc</h2>
+<table *ngIf="todos.length > 0" class="table">
+  <thead>
+    <tr>
+      <th>Mô Tả</th>
+      <th>Ngày Mục Tiêu</th>
+      <th>Hoàn Thành</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let todo of todos">
+      <td>{{ todo.description }}</td>
+      <td>{{ todo.targetDate | date }}</td>
+      <td>{{ todo.done ? 'Chưa xong' : 'Đã Xong' }}</td>
+    </tr>
+  </tbody>
+</table>
+<div *ngIf="todos.length === 0">
+  <p>Không có công việc nào.</p>
+</div>

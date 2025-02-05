@@ -1,0 +1,54 @@
+/* Căn giữa toàn bộ nội dung */
+.container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Nút button */
+.btn {
+    background-color: #007bff; /* Màu nền xanh */
+    color: white;
+    font-weight: bold;
+    padding: 12px 30px;
+    border-radius: 5px;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background-color: #0056b3; /* Màu nền khi hover */
+    transform: scale(1.05); /* Hiệu ứng phóng to */
+}
+
+/* Cải thiện tiêu đề */
+h1 {
+    text-align: center;
+    color: #007bff;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+/* Định dạng các container */
+.container p {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+/* Thêm một số kiểu cho các message */
+.container h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 20px;
+}
+
+.container a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.container a:hover {
+    color: #0056b3;
+}

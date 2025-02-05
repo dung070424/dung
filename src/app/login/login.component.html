@@ -1,16 +1,16 @@
 <h1>Login!</h1>
 
 <div class="container">
-  <div class="alert alert-warning" *ngIf='invalidLogin'>{{ errorMessage }}</div>
-<div>
-  Uer Name : <input type="text" name="username" [(ngModel)]="username">
-Password : <input type="password" name="password" [(ngModel)]="password">
+  <div class="alert alert-warning" *ngIf="invalidLogin">{{ errorMessage }}</div>
 
+  <mat-form-field>
+    <input matInput placeholder="Enter your username" name="username" [(ngModel)]="username">
+  </mat-form-field>
 
-<!-- Uer Name : {{ username }} -->
+  <mat-form-field>
+    <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'" name="password" [(ngModel)]="password">
+    <mat-icon matSuffix (click)="hide = !hide">{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+  </mat-form-field>
 
-<!-- <button (click)=handleLogin() class="btn btn-success">Login</button> -->
-<!-- <button (click)="handleBasicAuthLogin()" class="btn btn-success">Login</button> -->
-<button (click)="handleJWTAuthLogin()" class="btn btn-success">Login</button>
-</div>
+  <button (click)="handleJWTAuthLogin()" class="btn btn-success">Login</button>
 </div>

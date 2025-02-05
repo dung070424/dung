@@ -9,6 +9,7 @@ import { RouteGuardService } from './service/route-guard.service';
 import { TodoComponent } from './todo/todo.component';
 import { ListAmdinComponent } from './list-amdin/list-amdin.component';
 import { AdminComponent } from './admin/admin.component';
+import { AdminDetailComponent } from './admin-detail/admin-detail.component';
 
 
 
@@ -21,7 +22,7 @@ const routes: Routes = [
   {path : 'todos/:id', component : TodoComponent,canActivate:[RouteGuardService]},
   {path : 'amdin', component : ListAmdinComponent,canActivate:[RouteGuardService]},
   {path: 'admins/:id', component: AdminComponent, canActivate: [RouteGuardService]},
-
+  { path: 'admin-detail/:id', component: AdminDetailComponent },
   {path : '**', component : ErrorComponent}
 ];
 

@@ -1,84 +1,54 @@
-<h1>Todo</h1>
+
 
 <div class="container">
-  <div class="alert alert-warning" *ngIf='todoForm.dirty && todoForm.invalid'>Không được để trống</div>
-  <div class="alert alert-warning" *ngIf='todoForm.dirty && targetDate.invalid'>Không được để trống Ngày</div>
-  <div class="alert alert-warning" *ngIf='todoForm.dirty && description.invalid'>Tên Không được để tróng và không được ít hơn 5 ký tự</div>
- <form (ngSubmit)="!todoForm.invalid &&  saveTodo()" #todoForm="ngForm">
-   <!-- Fieldset cho Description -->
-   <fieldset class="form-group">
-    <label for="description">Description</label>
-    <input 
-      type="text" #description="ngModel"
-      [(ngModel)]="todo.description" 
-      class="form-control" 
-      id="description" 
-      name="description" 
-      required="required"
-      minlength="5">
-  </fieldset>
-
-  <!-- Fieldset cho Target Date -->
-  <fieldset class="form-group">
-    <label for="targetDate">Target Date</label>
-    <input 
-      type="date" #targetDate="ngModel" 
-      [ngModel]="todo.targetDate | date: 'yyyy-MM-dd' " 
-      (ngModelChange)="todo.targetDate = $event"
-      class="form-control" 
-      id="targetDate" 
-      name="targetDate" 
-      required="required">
-  </fieldset>
 
 
-
-  <div class="form-check">
-    <input 
-      type="radio" 
-      id="male" 
-      [(ngModel)]="todo.gioiTinh" 
-      [value]="true" 
-      class="form-check-input" 
-      name="gioitinh" 
-      required>
-    <label class="form-check-label" for="male">Nam</label>
-  </div>
-  <div class="form-check">
-    <input 
-      type="radio" 
-      id="female" 
-      [(ngModel)]="todo.gioiTinh" 
-      [value]="false" 
-      class="form-check-input" 
-      name="gioitinh" 
-      required>
-    <label class="form-check-label" for="female">Nữ</label>
-  </div>
-
-
+  <h1>Todo</h1>
   
+  <form (ngSubmit)="!todoForm.invalid && saveTodo()" #todoForm="ngForm">
+    
+    <!-- Description -->
+    <div class="form-group">
+      <mat-form-field appearance="fill" hintLabel="Nhập tối thiểu 5 ký tự">
+        <mat-label>Description</mat-label>
+        <input matInput #description="ngModel" [(ngModel)]="todo.description" id="description" name="description" required minlength="5">
+        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        <mat-hint align="end">{{ todo.description?.length || 0 }}/100</mat-hint>
+      </mat-form-field>
+    </div>
 
-  <fieldset class="form-group">
-    <label for="chucvu">Chức Vụ</label>
-    <select 
-      [(ngModel)]="todo.chucvu" 
-      class="form-control" 
-      id="chucvu" 
-      name="chucvu" 
-      required>
-      <option [value]="'Admin'">Admin</option>
-      <option [value]="'User'">User</option>
-     
-    </select>
-  </fieldset>
+    <!-- Target Date -->
+    <div class="form-group">
+      <mat-form-field appearance="fill">
+        <mat-label>Target Date</mat-label>
+        <input matInput [matDatepicker]="picker" #targetDate="ngModel" [ngModel]="todo.targetDate | date: 'yyyy-MM-dd'" (ngModelChange)="todo.targetDate = $event" id="targetDate" name="targetDate" required>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-hint align="start">Chọn ngày hoàn thành</mat-hint>
+      </mat-form-field>
+    </div>
 
+    <!-- Email -->
+    <div class="form-group">
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" #mail="ngModel" [(ngModel)]="todo.mail" id="mail" name="mail" required email>
+        <mat-hint align="start">Nhập email hợp lệ</mat-hint>
+      </mat-form-field>
+    </div>
 
-  
+    <!-- Trạng thái -->
+    <div class="form-group">
+      <mat-radio-group [(ngModel)]="todo.done" name="done" required>
+        <mat-radio-button [value]="true">Chưa xong</mat-radio-button>
+        <mat-radio-button [value]="false">Đã xong</mat-radio-button>
+      </mat-radio-group>
+    </div>
 
-  <!-- Nút Save -->
-  <button type="submit" class="btn btn-success">Save</button>
- </form>
+    <!-- Nút Save -->
+    <div class="form-group">
+      <button mat-raised-button color="primary" type="submit">Save</button>
+    </div>
+
+  </form>
 </div>
-
-

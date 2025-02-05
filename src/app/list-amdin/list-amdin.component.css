@@ -1,0 +1,165 @@
+/* Định dạng chung cho container */
+.container {
+  max-width: 60%; /* Giảm chiều rộng tổng thể */
+  margin: 0 auto; /* Căn giữa */
+  padding: 5px;
+}
+
+.container.search-container {
+  margin-bottom: 1px; /* Giảm khoảng cách phía dưới ô tìm kiếm */
+}
+
+
+/* Định dạng bảng */
+table {
+  width: 100%;
+  margin-top: 1px; /* Giảm khoảng cách trên */
+  border-collapse: collapse;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  font-size: 14px; /* Giảm kích thước chữ */
+}
+
+/* Định dạng tiêu đề bảng */
+th, td {
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid #ddd;
+  padding: 6px; /* Giảm padding cho dòng */
+}
+
+th {
+  font-weight: bold;
+  text-align: left;
+  padding-left: 10px; /* Giảm padding trái */
+  background-color: #f8f8f8;
+  color: #333;
+}
+
+/* Hover hàng */
+tr:hover {
+  background-color: #a7a5a5;
+}
+
+/* Định dạng button */
+button {
+  margin-top: 5px;
+  padding: 5px 8px;
+  font-size: 12px; /* Giảm kích thước chữ */
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  min-width: 60px;
+  max-width: 120px;
+}
+
+/* Màu mặc định của button */
+button {
+  background-color: #66FF66;
+  color: black;
+}
+
+button:hover {
+  background-color: #006633;
+  transform: scale(1.02);
+  color: white;
+}
+
+/* Nút Xóa */
+button.delete-button {
+  background-color: #FFEB3B;
+  color: black;
+}
+
+button.delete-button:hover {
+  background-color: #FBC02D;
+}
+
+/* Nút Cập Nhật */
+button.update-button {
+  background-color: #2196F3;
+  color: white;
+}
+
+button.update-button:hover {
+  background-color: #1976D2;
+}
+
+/* Nút Xem Thông Tin */
+button.info-button {
+  background-color: #FF9800;
+  color: white;
+}
+
+button.info-button:hover {
+  background-color: #F57C00;
+}
+
+/* Nút Thêm Admin */
+button.add-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px 12px;
+}
+
+button.add-button:hover {
+  background-color: #388E3C;
+}
+
+/* Phân trang */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5px;
+  gap: 5px;
+}
+
+.pagination-info {
+  font-size: 14px; /* Giảm kích thước chữ */
+  font-weight: bold;
+}
+
+/* Căn chỉnh row */
+.row {
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.mat-paginator {
+  max-width: 60%;  /* Giảm kích thước ngang */
+  margin: 10px auto;  /* Căn giữa */
+  padding: 5px;
+}
+
+/* Responsive cho Mobile */
+@media (max-width: 768px) {
+  .container {
+    max-width: 90%;
+  }
+
+  table {
+    font-size: 12px;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  th, td {
+    padding: 4px;
+  }
+
+  button {
+    font-size: 10px;
+    padding: 4px 6px;
+  }
+
+  .pagination-container {
+    flex-direction: column;
+    gap: 3px;
+  }
+}

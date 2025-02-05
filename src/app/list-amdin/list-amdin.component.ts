@@ -1,22 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AdminDataService } from '../service/data/admin-data.service';
 import { Router } from '@angular/router';
-import { Todo } from '../list-todos/list-todos.component';
-
 import { TodoDataService } from '../service/data/todo-data.service';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
-
-export class Admin{
-  
+export class Admin {
   constructor(
-    
-    public id : number,
-    public name : string,
-    public gioitinh : boolean,
-    public ngaysinh : Date,
-    public chucvu : string,
-  ){}
+    public id: number,
+    public name: string,
+    public gioitinh: boolean,
+    public ngaysinh: Date,
+    public chucvu: string
+  ) { }
 }
 
 @Component({
@@ -24,102 +22,125 @@ export class Admin{
   templateUrl: './list-amdin.component.html',
   styleUrls: ['./list-amdin.component.css']
 })
-export class ListAmdinComponent implements OnInit {
-amdin : Admin[]
-todos: Todo[]
-messages : string
+export class ListAmdinComponent implements OnInit, OnDestroy {
+  admins: Admin[] = [];
+  dataSource: MatTableDataSource<Admin> = new MatTableDataSource();
+  messages: string = '';
+  username: string = 'dung123';
+  searchName: string = '';
+  page: number = 0;
+  size: number = 5;
+  totalPages: number = 0;
+  private searchSubject = new Subject<string>();
+  private destroy$ = new Subject<void>();
 
-username: string = 'dung12346';
-// [
-//   new Admin(1,'Chử Đức Dũng',false,new Date()),
-//   new Admin(2,'Chử Đức Dũng',false,new Date()),
-//   new Admin(3,'Chử Đức Dũng',true,new Date())
-// ]
-  // amdin = {
-  //   id : 1,
-  //   name : 'Chử Đức Dũng'
-  // }
+  sortBy: string = 'id';
+  sortDirection: string = 'asc';
+
+
+  
+
+  displayedColumns: string[] = ['name', 'gioitinh', 'ngaysinh', 'chucvu', 'update', 'delete', 'info'];
 
   constructor(
-    private adminService:AdminDataService,
-    private todoService : TodoDataService,
-    private router : Router
-  ) {}
+    private adminService: AdminDataService,
+    private todoService: TodoDataService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
+    this.refreshAdmins();
 
-    this.refreshAdmin();
-    this.loadTodosAndAddToAdmin();
-    
+    this.searchSubject
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe((name) => this.searchAdmins(name));
   }
-  refreshAdmin(){
-   
-    this.adminService.retrieveAllAdmin('dung12346').subscribe(
-      response =>{
-        console.log(response);
-        this.amdin =response;
-        
+
+  refreshAdmins() {
+    this.adminService.retrieveAllAdminPaginated(this.username, this.page, this.size).subscribe(
+      (response) => {
+        this.admins = response.content;
+        this.totalPages = response.totalPages;
+        this.dataSource.data = this.admins;
+      },
+      (error) => {
+        this.messages = 'Không thể tải dữ liệu Admin.';
+        console.error(error);
       }
-    )
+    );
   }
 
-
-  
-
-  loadTodosAndAddToAdmin() {
-    this.todoService.retrieveAlltodos(this.username).subscribe({
-      next: (response) => {
-        console.log('Dữ liệu từ API:', response);
-        this.todos = response || [];
-        if (this.todos.length === 0) {
-          this.messages = 'Không có dữ liệu Todo để thêm vào Admin.';
-          return;
+  searchAdmins(name: string) {
+    this.adminService.searchAdmins(this.username, name, this.page, this.size, this.sortBy, this.sortDirection)
+      .subscribe(
+        (response) => {
+          this.admins = response.content;
+          this.totalPages = response.totalPages;
+          this.dataSource.data = this.admins;
+        },
+        (error) => {
+          console.error('Lỗi khi tìm kiếm admin:', error);
+          this.messages = 'Không tìm thấy kết quả.';
         }
-
-        const newAdmins = this.todos.map(
-          (todo) =>
-            new Admin(
-              todo.id,
-              todo.description,
-              todo.gioiTinh,
-              todo.targetDate,
-              todo.chucvu
-            )
-        );
-
-        this.amdin = [...this.amdin, ...newAdmins];
-        this.messages = 'Dữ liệu từ Todo đã được tự động thêm vào Admin!';
-      },
-      error: (err) => {
-        console.error('Lỗi khi gọi API:', err);
-        this.messages = 'Không thể tải dữ liệu từ Todo.';
-      },
-    });
+      );
   }
-  
 
+  onSearchInputChange(name: string) {
+    this.searchSubject.next(name);
+  }
 
-  deleteAdmin(id){
-    console.log(`delete admin ${id}`)
-    this.adminService.deleteAdmin('dung12346',id).subscribe(
-      response => {
-        console.log(response);
-        this.messages = `Delete of Admin ${id} Successful!`
-        this.refreshAdmin();
+  changeSort(column: string) {
+    if (this.sortBy === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortBy = column;
+      this.sortDirection = 'asc';
+    }
+    this.searchAdmins(this.searchName);
+  }
+
+  deleteAdmin(id: number) {
+    this.adminService.deleteAdmin(this.username, id).subscribe(
+      () => {
+        this.messages = `Xóa Admin ${id} thành công!`;
+        this.refreshAdmins();
+      },
+      (error) => {
+        console.error('Lỗi khi xoá admin:', error);
+        this.messages = `Không thể xoá Admin ${id}.`;
       }
-    )
-   
+    );
   }
 
-  updateAdmin(id){
-  
-    console.log(`update ${id}`)
+
+  updateAdmin(id: number) {
     this.router.navigate(['admins', id]);
-   
   }
 
-  Adminadd(){
+  Adminadd() {
     this.router.navigate(['admins', -1]);
   }
 
+  nextPage() {
+    if (this.page < this.totalPages - 1) {
+      this.page++;
+      this.refreshAdmins();
+    }
+  }
+
+  previousPage() {
+    if (this.page > 0) {
+      this.page--;
+      this.refreshAdmins();
+    }
+  }
+
+  viewAdminInfo(adminId: number) {
+    this.router.navigate(['/admin-detail', adminId]);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

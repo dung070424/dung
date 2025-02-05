@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TodoDataService } from '../service/data/todo-data.service';
 import { Router } from '@angular/router';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material';
 
-
-export class Todo{
+export class Todo {
   constructor(
     public id: number,
     public description: string,
     public done: boolean,
+    public mail: string,
     public targetDate: Date,
-    public chucvu : string,
-    public gioiTinh : boolean
-  ){
-
-  }}
+  ) { }
+}
 
 @Component({
   selector: 'app-list-todos',
@@ -21,65 +21,72 @@ export class Todo{
   styleUrls: ['./list-todos.component.css']
 })
 export class ListTodosComponent implements OnInit {
-  todos : Todo[]
+  todos: Todo[];
+  message: string;
+  displayedColumns: string[] = ['description', 'targetDate','mail', 'done', 'update', 'actions'];
+  dataSource: MatTableDataSource<Todo>;
 
-  message: string
-  // todos = [
-  //   new Todo(1,'Chử đức Dũng',false, new Date()),
-  //   new Todo(2,'Chử đức Anh',false, new Date()),
-  //   new Todo(3,'Chử đức Khải',false, new Date()),
-    // {id : 1 , description: 'Chử Đức Dũng'},
-    // {id : 2 , description: 'Chử Đức Anh'},
-    // {id : 3 , description: 'Chử Đức Khải'},
-  // ]
-  // todo = {
-  //   id : 1,
-  //   description: 'Chử Đức Dũng'
-  // }
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(
-    private todoService:TodoDataService,
-    private router : Router
-  ) {}
+  @ViewChild(MatSort) sort: MatSort;
 
-  ngOnInit() {
-     this.refreshTodos();
+  
+
+  ngAfterViewInit() {
+    if (this.dataSource) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
   }
 
 
-  refreshTodos(){
-    this.todoService.retrieveAlltodos('dung123').subscribe({
+  
+
+  constructor(
+    private todoService: TodoDataService,
+    private router: Router
+  ) { }
+
+  ngOnInit() {
+    this.refreshTodos();
+  }
+
+ 
+
+  refreshTodos() {
+    this.todoService.retrieveAlltodos('dung12346').subscribe({
       next: (response) => {
         this.todos = response;
+        this.dataSource = new MatTableDataSource(this.todos); // Gán lại dataSource mỗi lần dữ liệu thay đổi
+        // Gán paginator và sort sau khi dataSource đã được khởi tạo
+        if (this.dataSource) {
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+          
+        }
         console.log('Todos retrieved:', this.todos);
       },
       error: (error) => {
         console.error('Error occurred while retrieving todos:', error);
-        // Thêm xử lý tùy chỉnh cho lỗi nếu cần
       }
     });
   }
 
-  deleteTodo(id){
-     console.log(`delete ${id}`)
-
-    this.todoService.deleteTodo('dung123', id).subscribe(
-      response => {
-        console.log(response);
-        this.message= `Delete of Todo ${id} Successfull`;
-        this.refreshTodos();
-      }
-    )
+  deleteTodo(id) {
+    console.log(`delete ${id}`);
+    this.todoService.deleteTodo('dung12346', id).subscribe(response => {
+      console.log(response);
+      this.message = `Delete of Todo ${id} Successful`;
+      this.refreshTodos();
+    });
   }
 
-
-  updateTodo(id){
-    console.log(`update ${id}`)
+  updateTodo(id) {
+    console.log(`update ${id}`);
     this.router.navigate(['todos', id]);
   }
 
-
-  addTodo(){
-    this.router.navigate(['todos', -1])
+  addTodo() {
+    this.router.navigate(['todos', -1]);
   }
 }

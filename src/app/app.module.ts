@@ -17,6 +17,38 @@ import { TodoComponent } from './todo/todo.component';
 import { HttpIntercepterBasicAuthService } from './service/http/http-intercepter-basic-auth.service';
 import { ListAmdinComponent } from './list-amdin/list-amdin.component';
 import { AdminComponent } from './admin/admin.component';
+import { AdminDetailComponent } from './admin-detail/admin-detail.component';
+
+
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatButtonModule } from '@angular/material/button';
+
+import { NoopAnimationsModule } from '@angular/platform-browser/animations'; // Import NoopAnimationsModule
+
+
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
+
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatListModule } from '@angular/material/list';
+
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,13 +61,29 @@ import { AdminComponent } from './admin/admin.component';
     LogoutComponent,
     TodoComponent,
     ListAmdinComponent,
-    AdminComponent
+    AdminComponent,
+    AdminDetailComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatButtonModule,
+    MatSortModule,
+    NoopAnimationsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    BrowserAnimationsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatIconModule,
+    MatSelectModule,
+    MatToolbarModule,
+    MatListModule
   ],
   providers: [
      {provide : HTTP_INTERCEPTORS, useClass : HttpIntercepterBasicAuthService, multi :  true}

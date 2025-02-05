@@ -10,66 +10,81 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class TodoComponent implements OnInit {
   id: number
-  todo : Todo
+  todo: Todo
   constructor(
     private todoService: TodoDataService,
-    private route : ActivatedRoute,
-    private router : Router
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
-    this.todo = new Todo(this.id,'',false,new Date(),'',false);
-    if(this.id!=-1){
-      this.todoService.retrieveTodo('dung123', this.id).subscribe(
-         data => {
-    console.log('Data retrieved:', data);
-    this.todo = {
-      ...data,
-      gioiTinh: data.gioiTinh?true:false,
-    };
-  })
+    this.todo = new Todo(this.id, '', false, '', new Date());
+    if (this.id != -1) {
+      this.todoService.retrieveTodo('dung12346', this.id).subscribe(
+        data => {
+          console.log('Data retrieved:', data);
+          this.todo = {
+            ...data,
+            done: data.done ? true : false,
+          };
+        })
     }
 
   }
 
 
-  saveTodo(){
-// console.log("===========",this.todo)
-    // const todoData:Todo={...this.todo,gioitinh:this.todo.gioitinh?true:false};
-    if(this.id == -1){
+  saveTodo() {
+    // Kiểm tra email hợp lệ
+    if (!this.todo.mail || !this.todo.mail.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
       
-      this.todo.id=undefined
-      this.todoService.cerateTodo('dung123', this.todo).subscribe(
-        date => {
-          console.log(date)
-          this.router.navigate(['todos'])
+      return;
+    }
 
+
+
+    if (this.id == -1 || this.todo.id == null) {
+      this.todo.id = undefined;
+      this.todoService.cerateTodo('dung12346', this.todo).subscribe(
+        data => {
+          console.log('Todo đã được tạo:', data);
+         
+          this.router.navigate(['todos']);
+        },
+        error => {
+          console.error('Lỗi khi tạo todo:', error);
+          alert('Có lỗi xảy ra khi thêm công việc');
+        }
+      );
+    } else {
+      this.todoService.updateTodo('dung12346', this.id, this.todo).subscribe(
+        data => {
+          console.log('Todo đã được cập nhật:', data);
           
+          this.router.navigate(['todos']);
+        },
+        error => {
+          console.error('Lỗi khi cập nhật todo:', error);
+          alert('Có lỗi xảy ra khi cập nhật công việc');
         }
-      )
-    }else{
-      this.todoService.updateTodo('dung123', this.id, this.todo).subscribe(
-        date => {
-          console.log(date)
-          this.router.navigate(['todos'])
-        }
-      )
+      );
     }
-
-    // if (this.id === -1) {
-      
-    //   this.todoService.cerateTodo('dung123', null).subscribe(
-    //     (data) => {
-    //       console.log(data);
-    //       this.router.navigate(['todos']);
-    //     },
-    //     (err) => {
-    //       console.log(err);
-    //     }
-    //   );
-    // }
-   
   }
+
+
+  // if (this.id === -1) {
+
+  //   this.todoService.cerateTodo('dung123', null).subscribe(
+  //     (data) => {
+  //       console.log(data);
+  //       this.router.navigate(['todos']);
+  //     },
+  //     (err) => {
+  //       console.log(err);
+  //     }
+  //   );
+  // }
 
 }
+
+
